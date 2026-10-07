@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YaMe.vn - Thời Trang Túi Đeo</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ============ RESET ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --black: #111;
+    --gold: #f5b301;
+    --red: #e53935;
+    --gray: #666;
+    --font: 'Montserrat', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font);
+    color: var(--black);
+    background: #fff;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; cursor: pointer; }
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
+.container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
+
+/* ============ HEADER ============ */
+.header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+}
+.logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+.logo span { font-weight: 400; }
+.nav-menu { display: flex; gap: 28px; }
+.nav-menu a {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+.nav-menu a:hover, .nav-menu a.active { color: var(--gold); }
+.nav-menu a i { font-size: 10px; }
+.header-icons { display: flex; gap: 20px; font-size: 18px; align-items: center; }
+.header-icons a { cursor: pointer; transition: color 0.3s; }
+.header-icons a:hover { color: var(--gold); }
+.menu-toggle {
+    display: none;
+    font-size: 22px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--black);
+    padding: 5px;
+}
+
+/* ============ BREADCRUMB & TITLE ============ */
+.breadcrumb {
+    margin: 25px 0;
+    font-size: 13px;
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.breadcrumb a { cursor: pointer; }
+.breadcrumb a:hover { color: var(--black); }
+.breadcrumb i { font-size: 9px; }
+.page-title {
+    font-size: 46px;
+    font-weight: 400;
+    margin-bottom: 40px;
+    font-family: 'Times New Roman', serif;
+    letter-spacing: 1px;
+}
+
+/* ============ TRANG (PAGE) ============ */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ============ PRODUCT GRID (Trang chủ) ============ */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-bottom: 80px;
+}
+.product-card { display: flex; flex-direction: column; cursor: pointer; }
+.card-image {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    background: #eee;
+    border-radius: 4px;
+}
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+.product-card:hover .card-image img { transform: scale(1.08); }
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 15px;
+    text-align: center;
+    pointer-events: none;
+}
+.overlay h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+.overlay p { font-size: 11px; font-weight: 500; text-transform: uppercase; margin-bottom: 12px; }
+.price-box { display: flex; flex-direction: column; align-items: center; }
+.price-box small { font-size: 10px; font-style: italic; opacity: 0.85; }
+.price-box .price { font-size: 22px; font-weight: 700; color: var(--gold); }
+.card-link {
+    margin-top: 15px;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s;
+}
+.card-link i { font-size: 12px; transition: transform 0.3s; }
+.product-card:hover .card-link { border-bottom-color: var(--black); }
+.product-card:hover .card-link i { transform: translateX(6px); }
+
+/* ============ PRODUCT DETAIL GRID (Trang con) ============ */
+.product-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-bottom: 80px;
+}
+.product-item {
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    transition: box-shadow 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+.product-item:hover {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    transform: translateY(-4px);
+}
+.product-item .thumb {
+    position: relative;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+.product-item .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+.product-item:hover .thumb img { transform: scale(1.08); }
+.product-item .info { padding: 15px; }
+.product-item .name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    min-height: 42px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.product-item .price-row { display: flex; align-items: center; gap: 10px; }
+.product-item .price-new { color: var(--red); font-size: 16px; font-weight: 700; }
+.product-item .price-old { color: #999; font-size: 13px; text-decoration: line-through; }
+.product-item .badge-sale {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 3px;
+    z-index: 2;
+}
+
+/* ============ FOOTER ============ */
+.footer {
+    background: #111;
+    color: #ccc;
+    padding: 40px 0 20px;
+    font-size: 13px;
+    margin-top: 50px;
+}
+.footer-top {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-bottom: 30px;
+}
+.footer h4 { color: #fff; margin-bottom: 15px; font-size: 14px; text-transform: uppercase; }
+.footer a { display: block; padding: 4px 0; transition: color 0.3s; cursor: pointer; }
+.footer a:hover { color: var(--gold); }
+.footer a i { margin-right: 6px; }
+.footer-bottom {
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 12px;
+}
+
+/* ============ CHAT WIDGET ============ */
+.chat-widget {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+    border: 3px solid #fff;
+    cursor: pointer;
+    z-index: 998;
+    transition: transform 0.3s;
+    background: #0d8abc;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+.chat-widget:hover { transform: scale(1.1); }
+
+/* ============ OVERLAY KHI MỞ MENU MOBILE ============ */
+.menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.menu-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1024px) {
+    .product-grid { grid-template-columns: repeat(3, 1fr); }
+    .product-detail-grid { grid-template-columns: repeat(3, 1fr); }
+    .page-title { font-size: 38px; }
+    .footer-top { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .menu-toggle { display: block; }
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 320px;
+        height: 100vh;
+        background: #fff;
+        padding: 80px 25px 30px;
+        gap: 20px;
+        z-index: 999;
+        transition: right 0.4s ease;
+        box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+        overflow-y: auto;
+    }
+    .nav-menu.active { right: 0; }
+    .nav-menu a {
+        font-size: 15px;
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .page-title { font-size: 30px; margin-bottom: 25px; }
+    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .product-detail-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .overlay h3 { font-size: 11px; }
+    .overlay p { font-size: 9px; }
+    .price-box .price { font-size: 16px; }
+    .card-link { font-size: 13px; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
+    .header-icons { gap: 12px; font-size: 16px; }
+    .logo { font-size: 18px; }
+    .product-item .name { font-size: 12px; }
+    .product-item .price-new { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="header">
+    <div class="container header-inner">
+        <div class="logo" onclick="showPage('home')">
+            <i class="fa-solid fa-shield-halved"></i> YaMe<span>.vn</span>
+        </div>
+        <nav class="nav-menu" id="navMenu">
+            <a onclick="showPage('home')" class="active">TRANG CHỦ</a>
+            <a onclick="comingSoon('SALE')">SALE</a>
+            <a onclick="comingSoon('ÁO')">ÁO <i class="fa-solid fa-chevron-down"></i></a>
+            <a onclick="comingSoon('QUẦN')">QUẦN <i class="fa-solid fa-chevron-down"></i></a>
+            <a onclick="comingSoon('JEAN')">JEAN <i class="fa-solid fa-chevron-down"></i></a>
+            <a onclick="comingSoon('PHỤ KIỆN')">PHỤ KIỆN <i class="fa-solid fa-chevron-down"></i></a>
+            <a onclick="comingSoon('CỬA HÀNG')">CỬA HÀNG</a>
+            <a onclick="comingSoon('VIP')">VIP</a>
+        </nav>
+        <div class="header-icons">
+            <a onclick="comingSoon('Tìm kiếm')"><i class="fa-solid fa-magnifying-glass"></i></a>
+            <a onclick="comingSoon('Tài khoản')"><i class="fa-regular fa-user"></i></a>
+            <a onclick="comingSoon('Giỏ hàng')"><i class="fa-solid fa-bag-shopping"></i></a>
+            <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay tối khi mở menu mobile -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+<main class="container">
+
+<!-- ============================================================ -->
+<!-- TRANG CHỦ -->
+<!-- ============================================================ -->
+<section class="page active" id="page-home">
+    <div class="breadcrumb">
+        <a onclick="showPage('home')">Trang chủ</a>
+    </div>
+    <h1 class="page-title">Túi Đeo</h1>
+
+    <div class="product-grid">
+
+        <div class="product-card" onclick="showPage('crossbag')">
+            <div class="card-image">
+                <img alt="Túi Đeo Chéo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 533'><defs><linearGradient id='g1' x1='0%25' y1='0%25' x2='0%25' y2='100%25'><stop offset='0%25' stop-color='%2378909c'/><stop offset='100%25' stop-color='%232c3e50'/></linearGradient></defs><rect width='400' height='533' fill='url(%23g1)'/><circle cx='200' cy='180' r='70' fill='%23ecf0f1' opacity='0.9'/><rect x='130' y='190' width='140' height='160' rx='15' fill='%23bdc3c7'/><path d='M130 220 Q200 120 270 220' stroke='%2334495e' stroke-width='12' fill='none' stroke-linecap='round'/><path d='M130 220 Q200 120 270 220' stroke='%2395a5a6' stroke-width='4' fill='none' stroke-linecap='round'/></svg>">
+                <div class="overlay">
+                    <h3>Kháng Nước Chống Bẩn</h3>
+                    <p>Gọn nhẹ mỗi ngày</p>
+                    <div class="price-box">
+                        <small>Đang sale chỉ từ</small>
+                        <span class="price">197.000đ</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-link">Túi Đeo Chéo (Cross Bag) <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+
+        <div class="product-card" onclick="showPage('tote')">
+            <div class="card-image">
+                <img alt="Túi Tote" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 533'><defs><linearGradient id='g2' x1='0%25' y1='0%25' x2='0%25' y2='100%25'><stop offset='0%25' stop-color='%23a8b8a0'/><stop offset='100%25' stop-color='%233d4a37'/></linearGradient></defs><rect width='400' height='533' fill='url(%23g2)'/><rect x='110' y='180' width='180' height='220' rx='10' fill='%23c9c5b8'/><rect x='110' y='180' width='180' height='40' fill='%23a39d88'/><path d='M140 180 Q140 120 160 120 M260 180 Q260 120 240 120' stroke='%236b6656' stroke-width='10' fill='none' stroke-linecap='round'/><rect x='150' y='260' width='100' height='60' rx='5' fill='%238a8570' opacity='0.7'/></svg>">
+                <div class="overlay">
+                    <h3>Canvas Chịu Lực</h3>
+                    <p>Ngăn chứa lớn</p>
+                    <div class="price-box">
+                        <small>Đang sale chỉ từ</small>
+                        <span class="price">97.000đ</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-link">Túi Tote <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+
+        <div class="product-card" onclick="showPage('messenger')">
+            <div class="card-image">
+                <img alt="Túi Messenger" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 533'><defs><linearGradient id='g3' x1='0%25' y1='0%25' x2='0%25' y2='100%25'><stop offset='0%25' stop-color='%235d4037'/><stop offset='100%25' stop-color='%231b1b1b'/></linearGradient></defs><rect width='400' height='533' fill='url(%23g3)'/><rect x='100' y='200' width='200' height='160' rx='12' fill='%233e2721'/><rect x='100' y='220' width='200' height='30' fill='%232a1a16'/><path d='M120 220 Q200 120 280 220' stroke='%232a1a16' stroke-width='14' fill='none' stroke-linecap='round'/><rect x='180' y='260' width='40' height='25' rx='4' fill='%235d4037'/><circle cx='200' cy='272' r='4' fill='%23f5b301'/></svg>">
+                <div class="overlay">
+                    <h3>Kháng Nước Vượt Trội</h3>
+                    <p>Ngăn chứa khoa học</p>
+                    <div class="price-box">
+                        <small>Đang sale chỉ từ</small>
+                        <span class="price">177.000đ</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-link">Túi Messenger <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+
+        <div class="product-card" onclick="showPage('slingbag')">
+            <div class="card-image">
+                <img alt="Túi Đeo Ngực" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 533'><defs><linearGradient id='g4' x1='0%25' y1='0%25' x2='0%25' y2='100%25'><stop offset='0%25' stop-color='%234a4e69'/><stop offset='100%25' stop-color='%23222b3a'/></linearGradient></defs><rect width='400' height='533' fill='url(%23g4)'/><rect x='130' y='230' width='140' height='140' rx='20' fill='%23334'/><path d='M130 260 Q200 150 270 260' stroke='%23222' stroke-width='12' fill='none'/><path d='M200 230 L230 280 L200 280 Z' fill='%23556'/><circle cx='200' cy='300' r='12' fill='%23f5b301'/><rect x='160' y='330' width='80' height='6' rx='3' fill='%23667'/></svg>">
+                <div class="overlay">
+                    <h3>Nhỏ Nhẹ Không Mỏi Vai</h3>
+                    <p>Siêu bền trượt nước</p>
+                    <div class="price-box">
+                        <small>Đang sale chỉ từ</small>
+                        <span class="price">297.000đ</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-link">Túi Đeo Ngực (Sling Bag) <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TRANG TÚI ĐEO CHÉO -->
+<!-- ============================================================ -->
+<section class="page" id="page-crossbag">
+    <div class="breadcrumb">
+        <a onclick="showPage('home')">Trang chủ</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>Túi Đeo Chéo</span>
+    </div>
+    <h1 class="page-title">Túi Đeo Chéo</h1>
+    <div class="product-detail-grid" id="grid-crossbag"></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TRANG TÚI TOTE -->
+<!-- ============================================================ -->
+<section class="page" id="page-tote">
+    <div class="breadcrumb">
+        <a onclick="showPage('home')">Trang chủ</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>Túi Tote</span>
+    </div>
+    <h1 class="page-title">Túi Tote</h1>
+    <div class="product-detail-grid" id="grid-tote"></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TRANG MESSENGER -->
+<!-- ============================================================ -->
+<section class="page" id="page-messenger">
+    <div class="breadcrumb">
+        <a onclick="showPage('home')">Trang chủ</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>Túi Messenger</span>
+    </div>
+    <h1 class="page-title">Túi Messenger</h1>
+    <div class="product-detail-grid" id="grid-messenger"></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TRANG SLING BAG -->
+<!-- ============================================================ -->
+<section class="page" id="page-slingbag">
+    <div class="breadcrumb">
+        <a onclick="showPage('home')">Trang chủ</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>Túi Đeo Ngực</span>
+    </div>
+    <h1 class="page-title">Túi Đeo Ngực (Sling Bag)</h1>
+    <div class="product-detail-grid" id="grid-slingbag"></div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-top">
+            <div>
+                <h4>Về YaMe</h4>
+                <a onclick="comingSoon('Giới thiệu')">Giới thiệu</a>
+                <a onclick="comingSoon('Tuyển dụng')">Tuyển dụng</a>
+                <a onclick="comingSoon('Liên hệ')">Liên hệ</a>
+            </div>
+            <div>
+                <h4>Hỗ trợ</h4>
+                <a onclick="comingSoon('Chính sách đổi trả')">Chính sách đổi trả</a>
+                <a onclick="comingSoon('Vận chuyển')">Vận chuyển</a>
+                <a onclick="comingSoon('Bảo mật')">Bảo mật</a>
+            </div>
+            <div>
+                <h4>Danh mục</h4>
+                <a onclick="showPage('crossbag')">Cross Bag</a>
+                <a onclick="showPage('tote')">Túi Tote</a>
+                <a onclick="showPage('messenger')">Messenger</a>
+                <a onclick="showPage('slingbag')">Sling Bag</a>
+            </div>
+            <div>
+                <h4>Kết nối</h4>
+                <a onclick="comingSoon('Facebook')"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                <a onclick="comingSoon('Instagram')"><i class="fa-brands fa-instagram"></i> Instagram</a>
+                <a onclick="comingSoon('TikTok')"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2024 YaMe.vn — All rights reserved.</div>
+    </div>
+</footer>
+
+<!-- ============ CHAT WIDGET ============ -->
+<div class="chat-widget" title="Chat với chúng tôi" onclick="comingSoon('Chat hỗ trợ')">
+    <i class="fa-solid fa-headset"></i>
+</div>
+
+<script>
+/* ================================================================
+   TẠO ẢNH SVG
+   ================================================================ */
+function makeSVG(color1, color2, type) {
+    const shapes = {
+        cross: `<circle cx='200' cy='230' r='80' fill='#ecf0f1' opacity='0.9'/>
+                <rect x='120' y='240' width='160' height='180' rx='18' fill='#bdc3c7'/>
+                <path d='M120 270 Q200 140 280 270' stroke='#34495e' stroke-width='14' fill='none' stroke-linecap='round'/>
+                <path d='M120 270 Q200 140 280 270' stroke='#95a5a6' stroke-width='5' fill='none' stroke-linecap='round'/>`,
+        tote: `<rect x='100' y='180' width='200' height='250' rx='10' fill='#c9c5b8'/>
+               <rect x='100' y='180' width='200' height='45' fill='#a39d88'/>
+               <path d='M135 180 Q135 110 160 110 M265 180 Q265 110 240 110' stroke='#6b6656' stroke-width='12' fill='none' stroke-linecap='round'/>
+               <rect x='150' y='280' width='100' height='70' rx='6' fill='#8a8570' opacity='0.6'/>`,
+        messenger: `<rect x='90' y='220' width='220' height='170' rx='14' fill='#3e2721'/>
+                    <rect x='90' y='240' width='220' height='35' fill='#2a1a16'/>
+                    <path d='M110 240 Q200 130 290 240' stroke='#2a1a16' stroke-width='16' fill='none' stroke-linecap='round'/>
+                    <rect x='175' y='290' width='50' height='30' rx='5' fill='#5d4037'/>
+                    <circle cx='200' cy='305' r='5' fill='#f5b301'/>`,
+        sling: `<rect x='120' y='250' width='160' height='150' rx='22' fill='#334'/>
+                <path d='M120 280 Q200 160 280 280' stroke='#222' stroke-width='14' fill='none'/>
+                <path d='M200 250 L240 300 L200 300 Z' fill='#556'/>
+                <circle cx='200' cy='330' r='14' fill='#f5b301'/>
+                <rect x='160' y='360' width='80' height='7' rx='3' fill='#667'/>`
+    };
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'>
+        <defs><linearGradient id='bg' x1='0%25' y1='0%25' x2='0%25' y2='100%25'>
+            <stop offset='0%25' stop-color='${color1}'/>
+            <stop offset='100%25' stop-color='${color2}'/>
+        </linearGradient></defs>
+        <rect width='400' height='400' fill='url(%23bg)'/>
+        ${shapes[type]}
+    </svg>`;
+    return 'data:image/svg+xml;utf8,' + svg.replace(/#/g, '%23').replace(/\n/g, '').replace(/\s+/g, ' ');
+}
+
+/* ================================================================
+   DỮ LIỆU SẢN PHẨM
+   ================================================================ */
+const products = {
+    crossbag: [
+        { name: 'Túi Đeo Chéo Da PU Cao Cấp Chống Nước', newPrice: '197.000đ', oldPrice: '280.000đ', sale: '-30%', c1: '#78909c', c2: '#2c3e50', shape: 'cross' },
+        { name: 'Túi Đeo Chéo Nam Tính Phong Cách Hàn Quốc', newPrice: '215.000đ', oldPrice: '290.000đ', sale: '-25%', c1: '#607d8b', c2: '#263238', shape: 'cross' },
+        { name: 'Túi Đeo Chéo Nữ Mini Dễ Thương Đi Học', newPrice: '150.000đ', oldPrice: '250.000đ', sale: '-40%', c1: '#b0bec5', c2: '#455a64', shape: 'cross' },
+        { name: 'Túi Chéo Chống Nước Đa Năng Nam Nữ', newPrice: '240.000đ', oldPrice: '300.000đ', sale: '-20%', c1: '#546e7a', c2: '#1c2833', shape: 'cross' },
+        { name: 'Túi Đeo Chéo Vải Canvas Trơn Basic', newPrice: '130.000đ', oldPrice: '200.000đ', sale: '-35%', c1: '#90a4ae', c2: '#37474f', shape: 'cross' },
+        { name: 'Túi Chéo Da Bò Thật Sang Trọng', newPrice: '420.000đ', oldPrice: '495.000đ', sale: '-15%', c1: '#795548', c2: '#3e2723', shape: 'cross' },
+        { name: 'Túi Chéo Vải Dù Thể Thao Năng Động', newPrice: '99.000đ', oldPrice: '180.000đ', sale: '-45%', c1: '#4fc3f7', c2: '#01579b', shape: 'cross' },
+        { name: 'Túi Chéo Đeo Bụng Du Lịch Chống Trộm', newPrice: '175.000đ', oldPrice: '250.000đ', sale: '-30%', c1: '#a1887f', c2: '#4e342e', shape: 'cross' }
+    ],
+    tote: [
+        { name: 'Túi Tote Canvas Đơn Giản Phong Cách Hàn', newPrice: '97.000đ', oldPrice: '150.000đ', sale: '-35%', c1: '#a8b8a0', c2: '#3d4a37', shape: 'tote' },
+        { name: 'Túi Tote Da Lộn Cao Cấp Đựng Laptop 14 inch', newPrice: '255.000đ', oldPrice: '365.000đ', sale: '-30%', c1: '#8d6e63', c2: '#3e2723', shape: 'tote' },
+        { name: 'Túi Tote Vải Canvas In Họa Tiết Cá Tính', newPrice: '120.000đ', oldPrice: '220.000đ', sale: '-45%', c1: '#c5cae9', c2: '#3949ab', shape: 'tote' },
+        { name: 'Túi Tote Đựng Tài Liệu Đi Làm Sang Trọng', newPrice: '280.000đ', oldPrice: '375.000đ', sale: '-25%', c1: '#455a64', c2: '#1c2833', shape: 'tote' },
+        { name: 'Túi Tote Nữ Da PU Mềm Mại Đựng Đồ Đi Chơi', newPrice: '165.000đ', oldPrice: '275.000đ', sale: '-40%', c1: '#f8bbd0', c2: '#ad1457', shape: 'tote' },
+        { name: 'Túi Tote Canvas Khổ Lớn Đựng Đồ Đi Siêu Thị', newPrice: '140.000đ', oldPrice: '175.000đ', sale: '-20%', c1: '#cfd8dc', c2: '#546e7a', shape: 'tote' },
+        { name: 'Túi Tote Da Cao Cấp Khóa Kéo An Toàn', newPrice: '320.000đ', oldPrice: '490.000đ', sale: '-35%', c1: '#5d4037', c2: '#1b1b1b', shape: 'tote' },
+        { name: 'Túi Tote Vải Bố Phong Cách Tối Giản Unisex', newPrice: '85.000đ', oldPrice: '170.000đ', sale: '-50%', c1: '#e0e0e0', c2: '#616161', shape: 'tote' }
+    ],
+    messenger: [
+        { name: 'Túi Messenger Da Bò Chống Nước Vượt Trội', newPrice: '177.000đ', oldPrice: '236.000đ', sale: '-25%', c1: '#5d4037', c2: '#1b1b1b', shape: 'messenger' },
+        { name: 'Túi Messenger Đựng Laptop 15.6 inch Cao Cấp', newPrice: '320.000đ', oldPrice: '460.000đ', sale: '-30%', c1: '#37474f', c2: '#111', shape: 'messenger' },
+        { name: 'Túi Messenger Vải Canvas Phong Cách Hàn Quốc', newPrice: '195.000đ', oldPrice: '300.000đ', sale: '-35%', c1: '#a1887f', c2: '#4e342e', shape: 'messenger' },
+        { name: 'Túi Messenger Nam Da PU Mềm Đeo Chéo', newPrice: '245.000đ', oldPrice: '305.000đ', sale: '-20%', c1: '#6d4c41', c2: '#2a1a16', shape: 'messenger' },
+        { name: 'Túi Messenger Đa Năng Đi Học Đi Làm', newPrice: '165.000đ', oldPrice: '275.000đ', sale: '-40%', c1: '#546e7a', c2: '#1c2833', shape: 'messenger' },
+        { name: 'Túi Messenger Da Thật Cao Cấp Phong Cách Ý', newPrice: '550.000đ', oldPrice: '650.000đ', sale: '-15%', c1: '#3e2723', c2: '#000', shape: 'messenger' },
+        { name: 'Túi Messenger Thể Thao Chống Thấm Nước', newPrice: '135.000đ', oldPrice: '245.000đ', sale: '-45%', c1: '#4db6ac', c2: '#004d40', shape: 'messenger' },
+        { name: 'Túi Messenger Nữ Tính Vintage Retro', newPrice: '210.000đ', oldPrice: '292.000đ', sale: '-28%', c1: '#bcaaa4', c2: '#5d4037', shape: 'messenger' }
+    ],
+    slingbag: [
+        { name: 'Túi Đeo Ngực Chống Nước Siêu Bền Trượt Nước', newPrice: '297.000đ', oldPrice: '425.000đ', sale: '-30%', c1: '#4a4e69', c2: '#222b3a', shape: 'sling' },
+        { name: 'Túi Đeo Ngực Nam Thể Thao Đi Phượt', newPrice: '220.000đ', oldPrice: '295.000đ', sale: '-25%', c1: '#37474f', c2: '#111', shape: 'sling' },
+        { name: 'Túi Đeo Ngực Nữ Mini Đựng Điện Thoại', newPrice: '150.000đ', oldPrice: '250.000đ', sale: '-40%', c1: '#f48fb1', c2: '#880e4f', shape: 'sling' },
+        { name: 'Túi Đeo Ngực Du Lịch Chống Trộm Đa Năng', newPrice: '245.000đ', oldPrice: '305.000đ', sale: '-20%', c1: '#607d8b', c2: '#263238', shape: 'sling' },
+        { name: 'Túi Đeo Ngực Vải Dù Nhẹ Không Mỏi Vai', newPrice: '165.000đ', oldPrice: '255.000đ', sale: '-35%', c1: '#81c784', c2: '#1b5e20', shape: 'sling' },
+        { name: 'Túi Đeo Ngực Da Cao Cấp Phong Cách Quý Ông', newPrice: '465.000đ', oldPrice: '550.000đ', sale: '-15%', c1: '#5d4037', c2: '#1b1b1b', shape: 'sling' },
+        { name: 'Túi Đeo Ngực Chạy Bộ Thể Dục Thể Thao', newPrice: '99.000đ', oldPrice: '180.000đ', sale: '-45%', c1: '#4fc3f7', c2: '#01579b', shape: 'sling' },
+        { name: 'Túi Đeo Ngực Hiphop Streetwear Cá Tính', newPrice: '210.000đ', oldPrice: '292.000đ', sale: '-28%', c1: '#7e57c2', c2: '#311b92', shape: 'sling' }
+    ]
+};
+
+/* ================================================================
+   RENDER SẢN PHẨM
+   ================================================================ */
+Object.keys(products).forEach(key => {
+    const grid = document.getElementById('grid-' + key);
+    if (!grid) return;
+    products[key].forEach(p => {
+        const html = `
+            <div class="product-item" onclick="alert('Bạn đã chọn: ${p.name}')">
+                <div class="thumb">
+                    <span class="badge-sale">${p.sale}</span>
+                    <img src="${makeSVG(p.c1, p.c2, p.shape)}" alt="${p.name}">
+                </div>
+                <div class="info">
+                    <div class="name">${p.name}</div>
+                    <div class="price-row">
+                        <span class="price-new">${p.newPrice}</span>
+                        <span class="price-old">${p.oldPrice}</span>
+                    </div>
+                </div>
+            </div>`;
+        grid.insertAdjacentHTML('beforeend', html);
+    });
+});
+
+/* ================================================================
+   ĐIỀU KHIỂN MENU MOBILE
+   ================================================================ */
+const menuToggle = document.getElementById('menuToggle');
+const navMenu = document.getElementById('navMenu');
+const menuOverlay = document.getElementById('menuOverlay');
+
+function openMenu() {
+    navMenu.classList.add('active');
+    menuOverlay.classList.add('active');
+    const icon = menuToggle.querySelector('i');
+    icon.className = 'fa-solid fa-xmark';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+    navMenu.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    const icon = menuToggle.querySelector('i');
+    icon.className = 'fa-solid fa-bars';
+    document.body.style.overflow = '';
+}
+
+menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (navMenu.classList.contains('active')) {
+        closeMenu();
+    } else {
+        openMenu();
+    }
+});
+
+/* ================================================================
+   CHUYỂN TRANG
+   ================================================================ */
+function showPage(pageId) {
+    // Đóng menu mobile nếu đang mở
+    closeMenu();
+
+    // Ẩn tất cả trang
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Hiện trang được chọn
+    const target = document.getElementById('page-' + pageId);
+    if (target) target.classList.add('active');
+
+    // Cập nhật active cho menu
+    document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+    if (pageId === 'home') {
+        document.querySelector('.nav-menu a').classList.add('active');
+    }
+
+    // Cuộn lên đầu
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ================================================================
+   THÔNG BÁO "SẮP RA MẮT"
+   ================================================================ */
+function comingSoon(feature) {
+    closeMenu();
+    alert('🚧 Tính năng "' + feature + '" đang được phát triển!\nVui lòng quay lại sau.');
+}
+
+/* ================================================================
+   ĐÓNG MENU KHI CLICK RA NGOÀI (Desktop resize)
+   ================================================================ */
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        closeMenu();
+    }
+});
+</script>
+
+</body>
+</html>
